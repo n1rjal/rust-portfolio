@@ -1,3 +1,4 @@
-fn main() {
-    println!("Hello, world!");
-}
+use tokio::main;
+
+#[main]
+async fn main() {}
