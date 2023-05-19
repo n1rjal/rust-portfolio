@@ -39,10 +39,28 @@ impl Project {
     }
 }
 
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Clone)]
 pub struct Testomonial {
     _id: ObjectId,
     author: String,
     body: String,
+}
+
+impl Testomonial {
+    pub async fn find_testonmonials(
+        db: &Database,
+    ) -> Result<Vec<Testomonial>, mongodb::error::Error> {
+        let collection = db.collection::<Testomonial>("testomonials");
+        let mut cursor = collection.find(None, None).await?;
+        let mut testonmonial_vec: Vec<Testomonial> = vec![];
+
+        while cursor.advance().await? {
+            let deserialized_testomonial = cursor.deserialize_current()?;
+            testonmonial_vec.push(deserialized_testomonial);
+        }
+
+        Ok(testonmonial_vec)
+    }
 }
 
 pub struct SocialMedia {

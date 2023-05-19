@@ -7,7 +7,9 @@ pub async fn set_up_connection() -> Result<Database> {
     let uri = var("MONGODB_URI").expect("MONGODB_URI must be provided");
     let db = var("MONGO_DATABASE").expect("MONGO_DATABASE must be provided");
 
-    let client_options = ClientOptions::parse(uri).await?;
+    let client_options = ClientOptions::parse(uri)
+        .await
+        .unwrap_or_else(|error| panic!("Error occured whilst creating client options {:?}", error));
 
     // Get a handle to the cluster
     let client = Client::with_options(client_options)?;
